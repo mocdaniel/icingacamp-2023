@@ -13,424 +13,740 @@ monaco: true
 src: ./slides/cover.md
 ---
 
-# Welcome to Slidev
-
-Presentation slides for developers
-
-<div class="pt-12">
-  <span @click="$slidev.nav.next" class="px-2 py-1 rounded cursor-pointer" hover="bg-white bg-opacity-10">
-    Press Space for next page <carbon:arrow-right class="inline"/>
-  </span>
-</div>
-
-<div class="abs-br m-6 flex gap-2">
-  <button @click="$slidev.nav.openInEditor()" title="Open in Editor" class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon:edit />
-  </button>
-  <a href="https://github.com/slidevjs/slidev" target="_blank" alt="GitHub"
-    class="text-xl slidev-icon-btn opacity-50 !border-none !hover:text-white">
-    <carbon-logo-github />
-  </a>
-</div>
-
-<!--
-The last comment block of each slide will be treated as slide notes. It will be visible and editable in Presenter Mode along with the slide. [Read more in the docs](https://sli.dev/guide/syntax.html#notes)
--->
-
 ---
 transition: fade-out
+layout: two-cols
 ---
 
-# What is Slidev?
+# About me
 
-Slidev is a slides maker and presenter designed for developers, consist of the following features
+<br />
 
-- 📝 **Text-based** - focus on the content with Markdown, and then style them later
-- 🎨 **Themable** - theme can be shared and used with npm packages
-- 🧑‍💻 **Developer Friendly** - code highlighting, live coding with autocompletion
-- 🤹 **Interactive** - embedding Vue components to enhance your expressions
-- 🎥 **Recording** - built-in recording and camera view
-- 📤 **Portable** - export into PDF, PNGs, or even a hostable SPA
-- 🛠 **Hackable** - anything possible on a webpage
+<br />
 
-<br>
-<br>
+* Consultant at NETWAYS since 2021
 
-Read more about [Why Slidev?](https://sli.dev/guide/why)
+* Icinga user since 2018 (Icinga 2.10)
 
-<!--
-You can have `style` tag in markdown to override the style for the current page.
-Learn more: https://sli.dev/guide/syntax#embedded-styles
--->
+* moved on to DevOps, Kubernetes, and "the cloud"
 
-<style>
-h1 {
-  background-color: #2B90B6;
-  background-image: linear-gradient(45deg, #4EC5D4 10%, #146b8c 20%);
-  background-size: 100%;
-  -webkit-background-clip: text;
-  -moz-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  -moz-text-fill-color: transparent;
-}
-</style>
+* happy to be here today
 
-<!--
-Here is another comment.
--->
+::right::
+
+<img src="/dbodky.jpg" />
+
+---
+layout: section
+---
+# Ins, Outs, and Expectations
+
+---
+layout: two-cols
+---
+
+# What I won't tell you
+
+<br />
+
+<br />
+
+<br />
+
+* instructions for production-ready Icinga2 on Kubernetes
+
+* a complete introduction to containers, Docker, or Kubernetes
+
+* a silver bullet for Icinga2 in HA mode
+
+::right::
+
+<div v-click=1>
+<h1>What I will tell you</h1>
+
+<br />
+
+<br />
+
+<br />
+
+<ul>
+<li><p>a short discussion of the tradeoffs of running Icinga2 in HA mode</p></li>
+
+<li><p>my takes on Icinga2 and its components in HA mode</p></li>
+
+<li><p>an introduction to Icinga's official Docker images for <b>Icinga2</b>, <b>Icingaweb2</b>, and <b>IcingaDB</b></p></li>
+
+<li><p>a working example of Icinga2 on Kubernetes</p></li>
+</ul>
+</div>
+
+
+
+---
+layout: section
+---
+
+# What is HA?
+
+---
+layout: quote
+---
+
+# "High Availability (HA for short) refers to the availability of resources in a computer system, in the wake of component failures in the system."
+
+\- Institute of Electrical and Electronics Engineers (IEEE)
+
+---
+layout: section
+---
+
+# So which components are there for Icinga2?
 
 ---
 layout: default
 ---
 
-# Table of contents
-
-```
-<Toc minDepth="1" maxDepth="5"></Toc>
-```
-
-<Toc></Toc>
+<LightOrDark>
+  <template #dark><img src="/icinga-ha-dark.png" /></template>
+  <template #light><img src="/icinga-ha-light.png" /></template>
+</LightOrDark>
 
 ---
-transition: slide-up
-
-level: 2
+layout: default
 ---
 
-# Navigation
+# Component \#1: Icinga2 Core
 
-Hover on the bottom-left corner to see the navigation's controls panel, [learn more](https://sli.dev/guide/navigation.html)
+<br />
 
-### Keyboard Shortcuts
+<div grid="~ cols-2 gap-2" m="-t-2">
+<ul><li><code>api</code> feature needs to be configured, along with a <code>zones.conf</code> configuration</li></ul><div></div>
 
-|     |     |
-| --- | --- |
-| <kbd>right</kbd> / <kbd>space</kbd>| next animation or slide |
-| <kbd>left</kbd>  / <kbd>shift</kbd><kbd>space</kbd> | previous animation or slide |
-| <kbd>up</kbd> | previous slide |
-| <kbd>down</kbd> | next slide |
+<ul><li>Both nodes share scheduled checks within their zone, with automated failover</li></ul><div></div>
 
-<!-- https://sli.dev/guide/animations.html#click-animations -->
-<img
-  v-click
-  class="absolute -bottom-9 -left-7 w-80 opacity-50"
-  src="https://sli.dev/assets/arrow-bottom-left.svg"
-/>
-<p v-after class="absolute bottom-23 left-45 opacity-30 transform -rotate-10">Here!</p>
+<ul><li>Both nodes communicate the shared, total state of the zone to each other</li></ul><div></div>
 
----
-layout: image-right
-image: https://source.unsplash.com/collection/94734566/1920x1080
----
-
-# Code
-
-Use code snippets and get the highlighting directly![^1]
-
-```ts {all|2|1-6|9|all}
-interface User {
-  id: number
-  firstName: string
-  lastName: string
-  role: string
-}
-
-function updateUser(id: number, update: User) {
-  const user = getUser(id)
-  const newUser = { ...user, ...update }
-  saveUser(id, newUser)
-}
-```
-
-<arrow v-click="3" x1="400" y1="420" x2="230" y2="330" color="#564" width="3" arrowSize="1" />
-
-[^1]: [Learn More](https://sli.dev/guide/syntax.html#line-highlighting)
-
-<style>
-.footnotes-sep {
-  @apply mt-20 opacity-10;
-}
-.footnotes {
-  @apply text-sm opacity-75;
-}
-.footnote-backref {
-  display: none;
-}
-</style>
-
----
-
-# Components
-
-<div grid="~ cols-2 gap-4">
-<div>
-
-You can use Vue components directly inside your slides.
-
-We have provided a few built-in components like `<Tweet/>` and `<Youtube/>` that you can use directly. And adding your custom components is also super easy.
-
-```html
-<Counter :count="10" />
-```
-
-<!-- ./components/Counter.vue -->
-<Counter :count="10" m="t-4" />
-
-Check out [the guides](https://sli.dev/builtin/components.html) for more.
+<ul><li>Several of Icinga2's features are HA-aware and -configurable, e.g. <code>icingadb</code>, <code>notifications</code>, <code>graphite</code>, or <code>influxdb</code></li></ul>
 
 </div>
-<div>
 
-```html
-<Tweet id="1390115482657726468" />
-```
-
-<Tweet id="1390115482657726468" scale="0.65" />
-
-</div>
-</div>
-
-<!--
-Presenter note with **bold**, *italic*, and ~~striked~~ text.
-
-Also, HTML elements are valid:
-<div class="flex w-full">
-  <span style="flex-grow: 1;">Left content</span>
-  <span>Right content</span>
-</div>
--->
-
+<LightOrDark>
+  <template #dark><img w-82 h-a top-28 right-24 absolute src="/icinga-api-detail-dark.png" /></template>
+  <template #light><img w-82 h-a top-28 right-24 absolute src="/icinga-api-detail-light.png" /></template>
+</LightOrDark>
 
 ---
-class: px-20
+layout: default
 ---
 
-# Themes
+# Component \#2: Redis
 
-Slidev comes with powerful theming support. Themes can provide styles, layouts, components, or even configurations for tools. Switching between themes by just **one edit** in your frontmatter:
+<LightOrDark>
+  <template #dark><img absolute top-52 right-24 w-92 h-a src="/icinga-redis-detail-dark.png" /></template>
+  <template #light><img absolute top-52 right-24 w-92 h-a src="/icinga-redis-detail-light.png" /></template>
+</LightOrDark>
+
+<br />
+
+<br />
+
+<br />
+
+<br />
 
 <div grid="~ cols-2 gap-2" m="-t-2">
 
-```yaml
----
-theme: default
----
-```
+<ul><li>One Redis instance per Icinga2 node</li></ul><div></div>
 
-```yaml
----
-theme: seriph
----
-```
+<ul><li>Icinga2 writes its <b>whole</b> state to Redis</li></ul><div></div>
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-default/01.png?raw=true">
+<ul><li>Persistency is configured via snapshots</li></ul><div></div>
 
-<img border="rounded" src="https://github.com/slidevjs/themes/blob/main/screenshots/theme-seriph/01.png?raw=true">
-
-</div>
-
-Read more about [How to use a theme](https://sli.dev/themes/use.html) and
-check out the [Awesome Themes Gallery](https://sli.dev/themes/gallery.html).
-
----
-preload: false
----
-
-# Animations
-
-Animations are powered by [@vueuse/motion](https://motion.vueuse.org/).
-
-```html
-<div
-  v-motion
-  :initial="{ x: -80 }"
-  :enter="{ x: 0 }">
-  Slidev
-</div>
-```
-
-<div class="w-60 relative mt-6">
-  <div class="relative w-40 h-40">
-    <img
-      v-motion
-      :initial="{ x: 800, y: -100, scale: 1.5, rotate: -50 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-square.png"
-    />
-    <img
-      v-motion
-      :initial="{ y: 500, x: -100, scale: 2 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-circle.png"
-    />
-    <img
-      v-motion
-      :initial="{ x: 600, y: 400, scale: 2, rotate: 100 }"
-      :enter="final"
-      class="absolute top-0 left-0 right-0 bottom-0"
-      src="https://sli.dev/logo-triangle.png"
-    />
-  </div>
-
-  <div
-    class="text-5xl absolute top-14 left-40 text-[#2B90B6] -z-1"
-    v-motion
-    :initial="{ x: -80, opacity: 0}"
-    :enter="{ x: 0, opacity: 1, transition: { delay: 2000, duration: 1000 } }">
-    Slidev
-  </div>
-</div>
-
-<!-- vue script setup scripts can be directly used in markdown, and will only affects current page -->
-<script setup lang="ts">
-const final = {
-  x: 0,
-  y: 0,
-  rotate: 0,
-  scale: 1,
-  transition: {
-    type: 'spring',
-    damping: 10,
-    stiffness: 20,
-    mass: 2
-  }
-}
-</script>
-
-<div
-  v-motion
-  :initial="{ x:35, y: 40, opacity: 0}"
-  :enter="{ y: 0, opacity: 1, transition: { delay: 3500 } }">
-
-[Learn More](https://sli.dev/guide/animations.html#motion)
+<ul><li>Those Redis instances are <b>not</b> clustered</li></ul><div></div>
 
 </div>
 
 ---
-
-# LaTeX
-
-LaTeX is supported out-of-box powered by [KaTeX](https://katex.org/).
-
-<br>
-
-Inline $\sqrt{3x-1}+(1+x)^2$
-
-Block
-$$
-\begin{array}{c}
-
-\nabla \times \vec{\mathbf{B}} -\, \frac1c\, \frac{\partial\vec{\mathbf{E}}}{\partial t} &
-= \frac{4\pi}{c}\vec{\mathbf{j}}    \nabla \cdot \vec{\mathbf{E}} & = 4 \pi \rho \\
-
-\nabla \times \vec{\mathbf{E}}\, +\, \frac1c\, \frac{\partial\vec{\mathbf{B}}}{\partial t} & = \vec{\mathbf{0}} \\
-
-\nabla \cdot \vec{\mathbf{B}} & = 0
-
-\end{array}
-$$
-
-<br>
-
-[Learn more](https://sli.dev/guide/syntax#latex)
-
+layout: default
 ---
 
-# Diagrams
+# Component \#3: IcingaDB
 
-You can create diagrams / graphs from textual descriptions, directly in your Markdown.
+<LightOrDark>
+  <template #dark><img absolute top-92 right-24 w-122 h-a src="/icinga-db-detail-dark.png" /></template>
+  <template #light><img absolute top-92 right-24 w-122 h-a src="/icinga-db-detail-light.png" /></template>
+</LightOrDark>
 
-<div class="grid grid-cols-3 gap-10 pt-4 -mb-6">
+<br />
 
-```mermaid {scale: 0.5}
-sequenceDiagram
-    Alice->John: Hello John, how are you?
-    Note over Alice,John: A typical interaction
-```
+<br />
 
-```mermaid {theme: 'neutral', scale: 0.8}
-graph TD
-B[Text] --> C{Decision}
-C -->|One| D[Result 1]
-C -->|Two| E[Result 2]
-```
+<br />
 
-```mermaid
-mindmap
-  root((mindmap))
-    Origins
-      Long history
-      ::icon(fa fa-book)
-      Popularisation
-        British popular psychology author Tony Buzan
-    Research
-      On effectivness<br/>and features
-      On Automatic creation
-        Uses
-            Creative techniques
-            Strategic planning
-            Argument mapping
-    Tools
-      Pen and paper
-      Mermaid
-```
+<div grid="~ cols-2 gap-2" m="-t-2">
 
-```plantuml {scale: 0.7}
-@startuml
+<ul><li>One IcingaDB daemon per Icinga2 node</li></ul><div></div>
 
-package "Some Group" {
-  HTTP - [First Component]
-  [Another Component]
-}
+<ul><li>Each reads from its own Redis instance</li></ul><div></div>
 
-node "Other Groups" {
-  FTP - [Second Component]
-  [First Component] --> FTP
-}
+<ul><li><b>Both</b> write to <b>the same</b> database</li></ul><div></div>
 
-cloud {
-  [Example 1]
-}
+<ul><li>Only one daemon writes to the database at a time</li></ul><div></div>
 
-
-database "MySql" {
-  folder "This is my folder" {
-    [Folder 3]
-  }
-  frame "Foo" {
-    [Frame 4]
-  }
-}
-
-
-[Another Component] --> [Example 1]
-[Example 1] --> [Folder 3]
-[Folder 3] --> [Frame 4]
-
-@enduml
-```
+<ul><li>HA aware, with support for failover</li></ul><div></div>
 
 </div>
 
-[Learn More](https://sli.dev/guide/syntax.html#diagrams)
-
 ---
-src: ./pages/multiple-entries.md
-hide: false
+layout: default
 ---
 
+# Component \#4: Database(s)
+
+<br />
+
+* Persists various information about our monitoring environment
+  * History for checks, notifications, downtimes, etc. (`IcingaDB`)
+  * Users, groups, memberships, etc. (`Icingaweb2`)
+  * Configuration (`Director`)
+  * Additional data from modules (`vspheredb`, `reporting`, etc.)
+
+* Writes are done by IcingaDB
+
+* Reads are done by Icingaweb2
+
+* High available?
+
+<LightOrDark>
+  <template #dark><img absolute top-92 right-24 w-122 h-a src="/icinga-sql-detail-dark.png" /></template>
+  <template #light><img absolute top-92 right-24 w-122 h-a src="/icinga-sql-detail-light.png" /></template>
+</LightOrDark>
+
 ---
-layout: center
-class: text-center
+layout: default
 ---
 
-# Learn More
+# Component \#4: Database(s)
 
-[Documentations](https://sli.dev) · [GitHub](https://github.com/slidevjs/slidev) · [Showcases](https://sli.dev/showcases.html)
+<br />
+
+<br /> 
+
+* Running databases in HA is difficult
+
+* Different possible deployment strategies for different database vendors:
+  * Failing over to stand-by replica
+  * Master/Slave replication
+  * Master/Master replication
+  * Clustering (e.g. Galera, Patroni)
+  * Distributed databases (Cassandra, Cockroach DB)
+
+* "*keep it simple*" is a good rule of thumb
 
 ---
-layout: end
+layout: default
 ---
 
+# Component \#5: Icingaweb2
+
+* Reads from Redis, reads and writes from/to the database
+
+* **Easy**: "just" a PHP web application
+
+* **But**:
+  * writes local configuration
+  * uses **sessions** for authenticated users
+  * provides modules with **daemons** which need to be made HA-aware (e.g. `vspheredb`)
+
+* Again, 3rd-party tools will be needed for HA support
+
+<LightOrDark>
+  <template #dark><img absolute top-100 right-24 w-122 h-a src="/icinga-web-detail-dark.png" /></template>
+  <template #light><img absolute top-100 right-24 w-122 h-a src="/icinga-web-detail-light.png" /></template>
+</LightOrDark>
+
+---
+layout: default
+---
+
+# Summing it up...
+
+<br />
+
+* Icinga2 in HA involves:
+  * Lots of moving parts within Icinga's stack
+  * Lots of moving parts **around** Icinga's stack (load balancers, vIPs, file sync, etc.)
+  * Lots of expertise in very different areas (database, web servers, etc.)
+
+* With HA, new challenges arise:
+  * "Split Brain"
+  * Maintainability
+  * Error proneness
+
+---
+layout: quote
+---
+
+# "Do you need high<span style="color: #f79b23">est</span> availability or high<span style="color: #f79b23">er</span> availability?"
+
+\- Colleagues and I, quite often
+
+---
+layout: default
+---
+
+# What if...
+
+<br />
+
+<br />
+
+<br />
+
+* ...we could just **throw away** a node and **spin up** <br /> a new one in case of failure?
+
+<br />
+
+* ...our Icinga2 nodes were **stateless**?
+
+<br />
+
+* ...we could get rid of load balancers, service <br /> discovery, and file sync?
+
+<img absolute top-42 right-24 w-80 h-a src="/hot-take.jpeg" />
+
+---
+layout: section
+---
+
+# Containers
+
+---
+layout: two-cols
+
+---
+
+# What are containers?
+
+<br />
+
+* Ephemeral (short-lived) instances of an application
+
+* Based on images
+
+* Image ship dependencies, configuration, and code
+
+* "Build once, run (almost) anywhere"
+
+* Can be run in isolation or in groups
+
+* Operated by a container runtime (e.g. Docker, Podman)
+
+::right::
+
+<br />
+
+<br />
+
+
+<LightOrDark>
+<template #light><img src="/docker-basics-light.png" w-64 m-x-a h-a/></template>
+<template #dark><img src="/docker-basics-dark.png" w-64 m-x-a h-a/></template>
+</LightOrDark>
+
+<br />
+
+```console
+$ docker pull icinga/icinga2:2.11.4  # (1)
+$ docker run icinga/icinga2:2.11.4   # (2)
+```
+
+---
+layout: section
+---
+
+# Does Icinga provide container images?
+
+<v-click>
+<h1>Yes!</h1>
+</v-click>
+
+---
+layout: default
+---
+
+# Icinga's container images
+
+<br />
+
+* Icinga provides containers for all of its main components on **DockerHub**:
+  * Icinga2 - `icinga/icinga2`
+  * Icingaweb2 - `icinga/icingaweb2`
+  * IcingaDB - `icinga/icingadb`
+  * Director (via Icingaweb2) - `icinga/icingaweb2`
+
+* Other needed components can be found on **DockerHub** as well:
+  * PostgreSQL - `postgres`
+  * MySQL/MariaDB - `mariadb`
+  * Redis - `redis`
+
+---
+layout: two-cols
+---
+
+# Icinga2 image
+
+<br />
+
+* Runs Icinga2 on `amd64`, `arm64`, and `armv7`
+
+* Can be used to run
+  * Masters
+  * Satellites
+  * Agents
+
+* **Mostly** configurable via environment variables
+
+* Additional configuration can be mounted from the host system
+
+::right::
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<img src="/docker-icinga2.png" border-2 >
+
+---
+layout: two-cols
+---
+
+# Icingaweb2 image
+
+<br />
+
+* Runs Icingaweb2 on `amd64` (works on `arm64` and `armv7` as well)
+
+* **Completely** configurable via environment variables thanks to a wrapper script
+
+* Provides **all** supported Icingaweb2 modules
+
+* Additional configuration can be mounted from the host system
+
+* Modules with **daemons** (e.g. `director`) can be run by adjusting the container's startup routine
+
+::right::
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<img src="/docker-icingaweb2.png" border-2 >
+
+---
+layout: two-cols
+---
+
+# IcingaDB image
+
+<br />
+
+<br />
+
+<br />
+
+* Runs IcingaDB on `amd64` (not yet on `arm64` and `armv7` 🙁)
+
+* **Completely** configurable via environment variables thanks to a wrapper script
+
+* Database migrations need to be done manually
+
+::right::
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<img src="/docker-icingadb.png" border-2 >
+
+---
+layout: default
+---
+
+# Gluing it all together
+
+* Running these containers requires configuration for<br /> each of them
+
+* Optimally, we don't want to do this manually
+
+* **docker compose** is a plugin to Docker that allows us<br />to define and configure multi-container applications once<br/> and run them anywhere
+
+* There's a repository by Icinga's Eric Lippmann that provides <br />a `docker-compose` setup for an entire Icinga stack:<br /> <br />[`lippserd/docker-compose-icinga`](https://github.com/lippserd/docker-compose-icinga)
+
+<br />
+
+<v-click>
+<b>Perfect for experimenting with Icinga2 locally or small (home) setups!</b>
+</v-click>
+
+---
+layout: default
+---
+
+# Containers, but better?
+
+<br />
+
+<br />
+
+<br />
+Docker compose is great, but still has some shortcomings:
+
+* What if our host goes down?
+
+* No load-balancing or traffic management
+
+* Data gets persisted on the host system (if configured)
+
+<br />
+
+<br />
+
+<v-click>
+<b>For better resilience, a multi-node solution with less "locality" would be nice.</b>
+</v-click>
+
+---
+layout: two-cols
+---
+
+# Kubernetes
+
+<br />
+
+<br />
+
+* A container orchestration platform
+
+* Connects multiple nodes to a cluster
+
+* Runs container workloads on the nodes
+
+* Monitors the health of nodes and containers
+
+* Automatically schedules containers to healthy nodes
+
+* Provides load-balancing and traffic management
+
+::right::
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<br />
+<img src="/kubernetes.png" w-48 h-a m-x-a>
+
+---
+layout: default
+---
+
+# Icinga2 on Kubernetes
+
+<br />
+
+* We got our prerequisites:
+  
+    * Container images ✅
+  
+    * A container orchestration platform ✅
+
+* Now we need to define our application's deployment
+
+* Kubernetes uses **declarative** configuration
+
+* We define our application in **manifests**
+
+* This can become quite complex, so we'll use a tool to help us
+
+---
+layout: default
+---
+
+# Helm - Kubernetes' inofficial package manager
+
+<br />
+
+<br />
+
+* Helm is a tool that helps us manage Kubernetes applications
+
+* It provides a templating engine for Kubernetes manifests
+
+* It allows us to define our application in a **chart**
+
+* Charts can be shared in repositories
+
+* Configuration can be done via **values**
+
+<br />
+
+<br />
+
+<v-click><b>We created a chart for Icinga2!</b></v-click>
+
+<img src="/helm.svg" w-48 h-a m-x-a absolute right-32 top-48>
+
+---
+layout: two-cols
+---
+
+# A home for Icinga charts
+
+<br />
+
+* Icinga's Helm chart(s) are hosted on GitHub: [icinga/helm-charts](https://github.com/icinga/helm-charts)
+
+* Today, there's one chart: `icinga-stack`
+
+* It can deploy:
+  * Icinga2
+  * IcingaDB
+  * Icingaweb2 (+ modules and daemons)
+  * MariaDB (optional)
+  * Redis (optional)
+
+::right::
+
+<br />
+
+<br />
+
+<br />
+
+<br />
+
+<img src="/helm-charts.png" border-2>
+
+---
+layout: section
+---
+
+# Time for a demo!
+
+---
+layout: default
+---
+
+# What did we see?
+
+<br />
+
+<br />
+
+* We deployed a complete Icinga2 stack on Kubernetes
+
+* We used a Helm chart to do so
+
+* The chart is highly (and easily) configurable
+  * on the application level
+  * on the Kubernetes level
+
+* Failover is handled by Kubernetes with minimal downtime
+
+* Integrates with other Kubernetes services by design (e.g. Ingress, cert-manager)
+
+---
+layout: default
+---
+
+# What did we not see?
+
+<br />
+
+<br />
+
+* Icinga(web)2 modules/configuration?
+  * Left out on purpose, but can be done
+  * Helm chart ships with sane defaults
+  * Some features and modules are not available (on purpose)
+
+* Custom plugins?
+  * Not part of the Helm chart
+  * Can be added to the container image
+  * Can be mounted into the container
+
+---
+layout: default
+---
+
+# Next steps
+
+<br />
+
+<br />
+
+<br />
+
+* "Configuration as Code" approach to module configuration (e.g. `businessprocess`)
+
+<br />
+
+<br />
+
+* Integration of pre-existing secrets (e.g. for databases etc.)
+
+<br />
+
+<br />
+
+* More docs and examples for the Helm chart
+
+---
+layout: default
+---
+
+# Takeaways and final thoughts
+
+<br />
+
+<br />
+
+* Monitoring with Icinga2 does not have to provide "highest availability"<br /> in most scenarios
+
+<br />
+
+* Icinga2 can be run in containers (and Kubernetes!)
+
+<br />
+
+* Depending on your use case, this can be a viable option for parts <br /> of your monitoring infrastructure
+
+<br />
+
+* The **compose** project and Helm chart are great starting points
+
+---
+layout: image-right
+image: /thankyou.jpg
+class: thankyoucontent
+---
+
+# Thank you!
+
+Slides available at [https://slides.dbodky.me/icingacamp-2023](https://slides.dbodky.me/icingacamp-2023)
