@@ -17,11 +17,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Install dependencies
         run: npm install
       - name: Build slides
-        run: npm run build --base /icingacamp-2023
+        run: npm run build --base /icingacamp-2023/
       - name: Upload built slides as artifact
         uses: actions/upload-pages-artifact@v1
         with:
