@@ -30,7 +30,13 @@ layout: two-cols
 
 * moved on to DevOps, Kubernetes, and "the cloud"
 
-* happy to be here today
+* happy to be here today and bring it all together
+
+<br />
+
+<br />
+
+Slides are available at<br /> [https://slides.dbodky.me/icingacamp-2023/](https://slides.dbodky.me/icingacamp-2023/).
 
 ::right::
 
@@ -73,7 +79,7 @@ layout: two-cols
 <ul>
 <li><p>a short discussion of the tradeoffs of running Icinga2 in HA mode</p></li>
 
-<li><p>my takes on Icinga2 and its components in HA mode</p></li>
+<li><p>my personal takes on Icinga2 and its components in HA mode</p></li>
 
 <li><p>an introduction to Icinga's official Docker images for <b>Icinga2</b>, <b>Icingaweb2</b>, and <b>IcingaDB</b></p></li>
 
@@ -159,7 +165,7 @@ layout: default
 
 <ul><li>One Redis instance per Icinga2 node</li></ul><div></div>
 
-<ul><li>Icinga2 writes its <b>whole</b> state to Redis</li></ul><div></div>
+<ul><li>Icinga2 writes its state to Redis</li></ul><div></div>
 
 <ul><li>Persistency is configured via snapshots</li></ul><div></div>
 
@@ -302,13 +308,15 @@ layout: default
 
 <br />
 
-<br />
-
-* ...we could just **throw away** a node and **spin up** <br /> a new one in case of failure?
+* ...we don't need 100% uptime for our Icinga node(s)?
 
 <br />
 
 * ...our Icinga2 nodes were **stateless**?
+
+<br />
+
+* ...we could just **throw away** a node and **spin up** <br /> a new one in case of failure?
 
 <br />
 
@@ -380,7 +388,7 @@ layout: default
 
 <br />
 
-* Icinga provides containers for all of its main components on **DockerHub**:
+* Icinga provides containers for all of its main components on **DockerHub** (a *registry*):
   * Icinga2 - `icinga/icinga2`
   * Icingaweb2 - `icinga/icingaweb2`
   * IcingaDB - `icinga/icingadb`
@@ -511,16 +519,17 @@ layout: default
 
 <br />
 
-<br />
-Docker compose is great, but still has some shortcomings:
+Containers, Docker, and compose are great, but still have some shortcomings:
 
 * What if our host goes down?
 
+<br />
+
 * No load-balancing or traffic management
 
-* Data gets persisted on the host system (if configured)
-
 <br />
+
+* Data gets persisted on the host system (if configured)
 
 <br />
 
@@ -682,11 +691,11 @@ layout: default
 <br />
 
 * Icinga(web)2 modules/configuration?
-  * Left out on purpose, but can be done
+  * Left out on purpose, but can be configured
   * Helm chart ships with sane defaults
   * Some features and modules are not available (on purpose)
 
-* Custom plugins?
+* Custom check plugins?
   * Not part of the Helm chart
   * Can be added to the container image
   * Can be mounted into the container
@@ -748,5 +757,7 @@ class: thankyoucontent
 ---
 
 # Thank you!
+
+<br />
 
 Slides available at [https://slides.dbodky.me/icingacamp-2023](https://slides.dbodky.me/icingacamp-2023)
